@@ -8,17 +8,10 @@
    google.setOnLoadCallback(Graph);
    function Graph() {
     var data = google.visualization.arrayToDataTable([
-     ['Больны','Вылечились', 'Умерли'],
-     {{ data.0[1:] }},
-     {{ data.1[1:] }},
-     {{ data.2[1:] }},
-     {{ data.3[1:] }},
-     {{ data.4[1:] }},
-     {{ data.5[1:] }},
-     {{ data.6[1:] }},
-     {{ data.7[1:] }},
-     {{ data.8[1:] }},
-     {{ data.9[1:] }}
+     ['Дата', 'Больны','Вылечились', 'Умерли'],
+     {% for item in data %}
+	['{{data[item][0]}}', {{data[item][1]}}, {{data[item][2]}}, {{data[item][3]}}],
+     {% endfor %}
     ]);
     var options = {
      title: 'Статистика по короновирусу в Москве',
