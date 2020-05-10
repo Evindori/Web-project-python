@@ -15,9 +15,11 @@ def create_file():
 
 def getnmbr(string):
     ans = 0
-    for i in string:
-        if i.isdigit():
-            ans = ans*10 + int(i)
+    with open('o.txt', 'w') as o:
+        for i in string:
+            if i.isdigit():
+                ans = ans*10 + int(i)
+        o.write(str(ans) + "\n")
     return ans
 
 def getdata():
@@ -32,11 +34,11 @@ def getdata():
             if line.find("Заражений") != -1 and fincome:
                 data_disease = getnmbr(line)
             if line.find("Выздоровлений") != -1 and fincome:
-                data_healed = getnmbr(line)
+                data_data_healed = getnmbr(line)
             if line.find("Смертей") != -1 and fincome:
-                data_deathes = getnmbr(line)
+                data_data_deathes = getnmbr(line)
                 fincome = 0
-    return {'data_disease': str(data_disease), 'data_healed': str(data_healed), 'data_deathes': str(data_deathes)}
+    return {'data_disease': str(data_disease), 'data_healed': str(90), 'data_deathes': str(90000)}
 
 @app.route('/')
 def main():
@@ -81,5 +83,5 @@ def main():
 
 @app.route('/today')
 def now():
-    data = getdata()
-    return render_template('today.html', data = data)
+    tdata = getdata()
+    return render_template('today.html', data = tdata)
