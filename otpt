@@ -1,8 +1,13 @@
 #!/usr/bin/env python3
 import sys
 import codecs
-import cgi
+import requests
 sys.stdout = codecs.getwriter("utf-8")(sys.stdout.detach())
+def create_file():
+  response = requests.get('http://coronavirus-monitor.ru/coronavirus-v-moskve/')
+  with open('test.html', 'wb') as output_file:
+    output_file.write(response.content)
+
 def getnmbr(string):
     ans = 0
     for i in string:
@@ -10,30 +15,19 @@ def getnmbr(string):
             ans = ans*10 + int(i)
     return ans
 
-
-with open('test.html', 'r', encoding='utf-8') as input_file:
-    data_disease = 0
-    data_healed = 0
-    data_deathes = 0
-    fincome = 1
-    for line in input_file:
-        if line.find("Заражений") != -1 and fincome:
-            data_disease = getnmbr(line)
-        if line.find("Выздоровлений") != -1 and fincome:
-            data_healed = getnmbr(line)
-        if line.find("Смертей") != -1 and fincome:
-            data_deathes = getnmbr(line)
-            fincome = 0
-print("Content-type: text/html\n")
-print("""<!DOCTYPE HTML>
-        <html>
-        <head>
-            <meta charset="utf-8">
-            <title>Статистика по короновирусу в Москве</title>
-        </head>
-        <body>""")
-print("<p> Заражений {}</p>".format(data_disease))
-print("<p> Выздоровело {}</p>".format(data_healed))
-print("<p> Умерло {}</p>".format(data_deathes))
-print("""</body>
-        </html>""")
+def getdata():
+    create_file()
+    with open('test.html', 'r', encoding='utf-8') as input_file:
+        data_disease = 0
+        data_healed = 0
+        data_deathes = 0
+        fincome = 1
+        for line in input_file:
+            if line.find("Заражений") != -1 and fincome:
+                data_disease = getnmbr(line)
+            if line.find("Выздоровлений") != -1 and fincome:
+                data_healed = getnmbr(line)
+            if line.find("Смертей") != -1 and fincome:
+                data_deathes = getnmbr(line)
+                fincome = 0
+    return {'data_disease': data_disease, 'data_healed': data_healed, 'data_deathes': data_deathes}
