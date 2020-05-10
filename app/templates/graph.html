@@ -6,12 +6,19 @@
   <script>
    google.load("visualization", "1", {packages:["corechart"]});
    google.setOnLoadCallback(drawChart);
-   function drawChart() {
+   function Graph() {
     var data = google.visualization.arrayToDataTable([
-     ['Дата', 'Смерти'],
-     ['10.05.2020', 104189],
-     ['9.05.2020', 104189],
-     ['8.05.2020', 98522]
+     ['Больны','Вылечились', 'Умерли'],
+     {{ data.0[1:] }},
+     {{ data.1[1:] }},
+     {{ data.2[1:] }},
+     {{ data.3[1:] }},
+     {{ data.4[1:] }},
+     {{ data.5[1:] }},
+     {{ data.6[1:] }},
+     {{ data.7[1:] }},
+     {{ data.8[1:] }},
+     {{ data.9[1:] }}
     ]);
     var options = {
      title: 'Статистика по короновирусу в Москве',
@@ -31,6 +38,6 @@
 	<p>
 		<a href="/"> На главную </a>
 	</p>
-        <div id="statistics" style="width: 1000px; height: 600px;" align="center"></div>
+        <div id="statistics" style="width: 1000px; height: 600px;"></div>
  </body>
  </html>
