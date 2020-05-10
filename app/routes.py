@@ -43,20 +43,26 @@ def getstat():
     create_file('https://coronavirusstat.ru/country/moskva/263672/')
     data = {}
     with open('test.html', 'r', encoding='utf-8') as input_file:
-        line = input_file.readline()
-        while line != '</html>':
             line = input_file.readline()
-            if line.find("Случаев</th>") != -1:
+            while line != '</html>':
                 line = input_file.readline()
-                if line.find("<th>") != -1:
-                    date = line
-                    clis = []
-                    while line.find('</tr>') == "-1":
-                        line = input_file.readline()
-                        if line.find('<td>'):
+                if line.find("Случаев</th>") != -1:
+                    n = 0
+                    while line.find('</tbody>') == -1:
+                        while line.find("<th>") == -1:
                             line = input_file.readline()
-                            clis.append(getnmbr(line))
-                    data.update({date : clis})
+                        date = line.strip()
+                        clis = []
+                        clis.append(str(date[4:-7]))
+                        while line.find('</tr>') == -1:
+                            line = input_file.readline()
+                            if line.find('<td>') != -1:
+                                line = input_file.readline()
+                                clis.append(getnmbr(line))
+                        data.update({n : clis})
+                        n += 1
+                        line = input_file.readline()
+                        line = input_file.readline()
     return data;
 
 
@@ -107,7 +113,7 @@ def now():
 
 @app.route('/statis')
 def rnow():
-    tdata = getstat()   
-    with open('o.txt', 'w') as o:
-        o.write(str(tdata))
+    tdata = getstat()
+    with open('test.txt', 'w') as output_file:
+        output_file.write(str(tdata))
     return render_template('graph.html', data = tdata)
