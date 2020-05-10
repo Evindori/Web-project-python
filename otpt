@@ -1,0 +1,39 @@
+#!/usr/bin/env python3
+import sys
+import codecs
+import cgi
+sys.stdout = codecs.getwriter("utf-8")(sys.stdout.detach())
+def getnmbr(string):
+    ans = 0
+    for i in string:
+        if i.isdigit():
+            ans = ans*10 + int(i)
+    return ans
+
+
+with open('test.html', 'r', encoding='utf-8') as input_file:
+    data_disease = 0
+    data_healed = 0
+    data_deathes = 0
+    fincome = 1
+    for line in input_file:
+        if line.find("Заражений") != -1 and fincome:
+            data_disease = getnmbr(line)
+        if line.find("Выздоровлений") != -1 and fincome:
+            data_healed = getnmbr(line)
+        if line.find("Смертей") != -1 and fincome:
+            data_deathes = getnmbr(line)
+            fincome = 0
+print("Content-type: text/html\n")
+print("""<!DOCTYPE HTML>
+        <html>
+        <head>
+            <meta charset="utf-8">
+            <title>Статистика по короновирусу в Москве</title>
+        </head>
+        <body>""")
+print("<p> Заражений {}</p>".format(data_disease))
+print("<p> Выздоровело {}</p>".format(data_healed))
+print("<p> Умерло {}</p>".format(data_deathes))
+print("""</body>
+        </html>""")
