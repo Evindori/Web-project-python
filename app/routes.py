@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 
 from flask import render_template
+from collections import namedtuple
 from app import app
 import codecs
 import requests
 import os
 import sys
+
 
 sys.stdout = codecs.getwriter("utf-8")(sys.stdout.detach())
 
@@ -114,6 +116,4 @@ def now():
 @app.route('/statis')
 def rnow():
     tdata = getstat()
-    with open('test.txt', 'w') as output_file:
-        output_file.write(str(tdata))
     return render_template('graph.html', data = tdata)
