@@ -8,8 +8,9 @@ import os
 import sys
 
 sys.stdout = codecs.getwriter("utf-8")(sys.stdout.detach())
-def create_file():
-  response = requests.get('http://coronavirus-monitor.ru/coronavirus-v-moskve/')
+
+def create_file(web):
+  response = requests.get(web)
   with open('test.html', 'wb') as output_file:
     output_file.write(response.content)
 
@@ -21,7 +22,7 @@ def getnmbr(string):
     return ans
 
 def getdata():
-    create_file()
+    create_file('http://coronavirus-monitor.ru/coronavirus-v-moskve/')
 
     with open('test.html', 'r', encoding='utf-8') as input_file:
         data_disease = 0
@@ -37,6 +38,27 @@ def getdata():
                 data_deathes = getnmbr(line)
                 fincome = 0
     return {'data_disease': str(data_disease), 'data_healed': str(data_healed), 'data_deathes': str(data_deathes)}
+
+def getstat():
+    create_file('https://coronavirusstat.ru/country/moskva/263672/')
+    data = {}
+    with open('test.html', 'r', encoding='utf-8') as input_file:
+        line = input_file.readline()
+        while line != '</html>':
+            line = input_file.readline()
+            if line.find("Случаев</th>") != -1:
+                line = input_file.readline()
+                if line.find("<th>") != -1:
+                    date = line
+                    clis = []
+                    while line.find('</tr>') == "-1":
+                        line = input_file.readline()
+                        if line.find('<td>'):
+                            line = input_file.readline()
+                            clis.append(getnmbr(line))
+                    data.update({date : clis})
+    return data;
+
 
 @app.route('/')
 def main():
@@ -67,7 +89,7 @@ def main():
                      Что бы вы хотели узнать?
                  </p>
                 <p align="center">
-                      <a href= '/today' class = "btn"> Графики</a>
+                      <a href= '/statis' class = "btn"> Графики</a>
                 </p>
                 <p align="center">
                       <a href="/today" class = "btn">Изменения за день</a>
@@ -78,8 +100,14 @@ def main():
         </body>
     </html>
     '''
-
 @app.route('/today')
 def now():
     tdata = getdata()
     return render_template('today.html', data = tdata)
+
+@app.route('/statis')
+def rnow():
+    tdata = getstat()   
+    with open('o.txt', 'w') as o:
+        o.write(str(tdata))
+    return render_template('graph.html', data = tdata)
