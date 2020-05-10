@@ -1,10 +1,15 @@
 <html>
     <head>
-        <title>Коронавирус в Москве</title>
+       <meta charset="utf-8" />
+       <title>Статистика по короновирусу в Москве</title>
     </head>
-    <body>
-        <h1>Hello, {{ data_disease }}</h1>
-        <h1>Hello, {{ data_healed }}</h1>
-        <h1>Hello, {{ data_deathes }}</h1>
+    <body text="#333300"; 
+             link="#333300"; 
+             alink="#9900CC"; 
+             vlink="#DEDE00"; 
+             style = "background-color:#FFFF99">
+        <h3 align="center">Заболевших - {{ data_disease }}</h3>
+        <h3 align="center">Выздоровевших - {{ data_healed }}</h3>
+        <h3 align="center">Умерших - {{ data_deathes }}</h3>
     </body>
 </html>
