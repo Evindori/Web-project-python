@@ -5,11 +5,12 @@ from app import app
 import codecs
 import requests
 import os
+import sys
 
 sys.stdout = codecs.getwriter("utf-8")(sys.stdout.detach())
 def create_file():
   response = requests.get('http://coronavirus-monitor.ru/coronavirus-v-moskve/')
-  with open(os.path.join(os.path.curdir, 'test.html'), 'wb') as output_file:
+  with open('test.html', 'wb') as output_file:
     output_file.write(response.content)
 
 def getnmbr(string):
@@ -27,17 +28,15 @@ def getdata():
         data_healed = 0
         data_deathes = 0
         fincome = 1
-        with open('ans.txt', 'w') as o:
-            for line in input_file:
-                if line.find("Заражений") != -1 and fincome:
-                    data_disease = getnmbr(line)
-                    o.write(data_disease + "\n")
-                if line.find("Выздоровлений") != -1 and fincome:
-                    data_healed = getnmbr(line)
-                if line.find("Смертей") != -1 and fincome:
-                    data_deathes = getnmbr(line)
-                    fincome = 0
-    return {'data_disease': data_disease, 'data_healed': data_healed, 'data_deathes': data_deathes}
+        for line in input_file:
+            if line.find("Заражений") != -1 and fincome:
+                data_disease = getnmbr(line)
+            if line.find("Выздоровлений") != -1 and fincome:
+                data_healed = getnmbr(line)
+            if line.find("Смертей") != -1 and fincome:
+                data_deathes = getnmbr(line)
+                fincome = 0
+    return {'data_disease': str(data_disease), 'data_healed': str(data_healed), 'data_deathes': str(data_deathes)}
 
 @app.route('/')
 def main():
