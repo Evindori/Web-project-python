@@ -1,0 +1,36 @@
+<html>
+ <head>
+  <meta charset="utf-8">
+  <title>Статистика по короновирусу в Москве</title>
+  <script src="https://www.google.com/jsapi"></script>
+  <script>
+   google.load("visualization", "1", {packages:["corechart"]});
+   google.setOnLoadCallback(drawChart);
+   function drawChart() {
+    var data = google.visualization.arrayToDataTable([
+     ['Дата', 'Смерти'],
+     ['1860', 1.3],
+     ['1885', 2000],
+     ['1901', 12170]
+    ]);
+    var options = {
+     title: 'Статистика по короновирусу в Москве',
+     hAxis: {title: 'Дата'},
+     vAxis: {title: 'Число'}
+    };
+    var chart = new google.visualization.ColumnChart(document.getElementById('statistics'));
+    chart.draw(data, options);
+   }
+  </script>
+ </head>
+ <body  text="#333300"; 
+             link="#333300"; 
+             alink="#9900CC"; 
+             vlink="#DEDE00"; 
+             style = "background-color:#FFFF99">
+	<p>
+		<a href="/"> На главную </a>
+	</p>
+        <div id="statistics" style="width: 1000px; height: 600px;" align="center"></div>
+ </body>
+ </html>
