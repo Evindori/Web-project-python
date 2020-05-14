@@ -46,7 +46,9 @@ def getdata():
             if line.find("Смертей") != -1 and fincome:
                 data_deathes = getnmbr(line)
                 fincome = 0
-    return {'data_disease': str(data_disease), 'data_healed': str(data_healed), 'data_deathes': str(data_deathes)}
+    return {'data_disease': str(data_disease),
+            'data_healed': str(data_healed),
+            'data_deathes': str(data_deathes)}
 
 def getstat():
     create_file('https://coronavirusstat.ru/country/moskva/263672/')
