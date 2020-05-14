@@ -11,6 +11,13 @@ import sys
 
 sys.stdout = codecs.getwriter("utf-8")(sys.stdout.detach())
 
+def reveresed(dict):
+    ans = {}
+    for i in range(10):
+        rev = 10 - i
+        ans.update({i: dict.get(i)})
+    return ans
+
 def create_file(web):
   response = requests.get(web)
   with open('test.html', 'wb') as output_file:
@@ -49,7 +56,7 @@ def getstat():
             while line != '</html>':
                 line = input_file.readline()
                 if line.find("Случаев</th>") != -1:
-                    n = 0
+                    n = 9
                     while line.find('</tbody>') == -1:
                         while line.find("<th>") == -1:
                             line = input_file.readline()
@@ -62,10 +69,10 @@ def getstat():
                                 line = input_file.readline()
                                 clis.append(getnmbr(line))
                         data.update({n : clis})
-                        n += 1
+                        n -= 1
                         line = input_file.readline()
                         line = input_file.readline()
-    return data;
+    return reveresed(data);
 
 
 @app.route('/')
@@ -111,9 +118,9 @@ def main():
 @app.route('/today')
 def now():
     tdata = getdata()
-    return render_template('today.html', data = tdata)
+    return render_template('today.html', data=tdata)
 
 @app.route('/statis')
 def rnow():
     tdata = getstat()
-    return render_template('graph.html', data = tdata)
+    return render_template('graph.html', data=tdata)
