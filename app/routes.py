@@ -8,8 +8,7 @@ import requests
 import os
 import sys
 
-
-sys.stdout = codecs.getwriter("utf-8")(sys.stdout.detach())
+# sys.stdout = codecs.getwriter("utf-8")(sys.stdout.detach())
 
 
 def reveresed(dict):
@@ -21,9 +20,9 @@ def reveresed(dict):
 
 
 def create_file(web, address):
-  response = requests.get(web)
-  with open(address, 'wb') as output_file:
-    output_file.write(response.content)
+    response = requests.get(web)
+    with open(os.path.join(os.path.abspath(os.path.dirname(__file__)), address), 'wb') as output_file:
+        output_file.write(response.content)
 
 
 def getnmbr(string):
@@ -37,7 +36,7 @@ def getnmbr(string):
 def getdata(address, web='http://coronavirus-monitor.ru/coronavirus-v-moskve/'):
     create_file(web, address)
 
-    with open(address, 'r', encoding='utf-8') as input_file:
+    with open(os.path.join(os.path.abspath(os.path.dirname(__file__)), address), 'r', encoding='utf-8') as input_file:
         data_disease = 0
         data_healed = 0
         data_deathes = 0
@@ -57,7 +56,7 @@ def getdata(address, web='http://coronavirus-monitor.ru/coronavirus-v-moskve/'):
 def getstat(address, web='https://coronavirusstat.ru/country/moskva/263672/'):
     create_file(web, address)
     data = {}
-    with open(address, 'r', encoding='utf-8') as input_file:
+    with open(os.path.join(os.path.abspath(os.path.dirname(__file__)), address), 'r', encoding='utf-8') as input_file:
             line = input_file.readline()
             while line != '</html>':
                 line = input_file.readline()
