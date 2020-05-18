@@ -11,6 +11,7 @@ import sys
 
 sys.stdout = codecs.getwriter("utf-8")(sys.stdout.detach())
 
+
 def reveresed(dict):
     ans = {}
     for i in range(10):
@@ -18,10 +19,12 @@ def reveresed(dict):
         ans.update({i: dict.get(i)})
     return ans
 
-def create_file(web):
+
+def create_file(web, address):
   response = requests.get(web)
-  with open('test.html', 'wb') as output_file:
+  with open(address, 'wb') as output_file:
     output_file.write(response.content)
+
 
 def getnmbr(string):
     ans = 0
@@ -30,10 +33,11 @@ def getnmbr(string):
             ans = ans*10 + int(i)
     return ans
 
-def getdata():
-    create_file('http://coronavirus-monitor.ru/coronavirus-v-moskve/')
 
-    with open('test.html', 'r', encoding='utf-8') as input_file:
+def getdata(address, web='http://coronavirus-monitor.ru/coronavirus-v-moskve/'):
+    create_file(web, address)
+
+    with open(address, 'r', encoding='utf-8') as input_file:
         data_disease = 0
         data_healed = 0
         data_deathes = 0
@@ -50,10 +54,10 @@ def getdata():
             'data_healed': str(data_healed),
             'data_deathes': str(data_deathes)}
 
-def getstat():
-    create_file('https://coronavirusstat.ru/country/moskva/263672/')
+def getstat(address, web='https://coronavirusstat.ru/country/moskva/263672/'):
+    create_file(web, address)
     data = {}
-    with open('test.html', 'r', encoding='utf-8') as input_file:
+    with open(address, 'r', encoding='utf-8') as input_file:
             line = input_file.readline()
             while line != '</html>':
                 line = input_file.readline()
@@ -74,18 +78,21 @@ def getstat():
                         n -= 1
                         line = input_file.readline()
                         line = input_file.readline()
-    return reveresed(data);
+    return reveresed(data)
 
 
 @app.route('/')
 def main():
     return render_template('main.html')
+
+
 @app.route('/today')
 def now():
-    tdata = getdata()
+    tdata = getdata('test.html')
     return render_template('today.html', data=tdata)
+
 
 @app.route('/statis')
 def rnow():
-    tdata = getstat()
+    tdata = getstat('test.html')
     return render_template('graph.html', data=tdata)
